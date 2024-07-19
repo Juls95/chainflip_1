@@ -13,6 +13,9 @@
   ```
 */
 'use client'
+import React from 'react';
+import TransactionForm from './components/TransactionForm';
+import TransactionList from './components/TransactionList';
 
 import { useState } from 'react'
 import {
@@ -74,6 +77,10 @@ export default function Example() {
         <body class="h-full">
         ```
       */}
+      <div className="App">
+        <TransactionForm />
+        <TransactionList />
+      </div>
       <div>
         <Dialog open={sidebarOpen} onClose={setSidebarOpen} className="relative z-50 lg:hidden">
           <DialogBackdrop
