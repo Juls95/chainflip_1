@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { SwapSDK } from '@chainflip/sdk/swap';
-import { HDNodeWallet } from 'ethers';
+import { ethers } from 'ethers';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -15,17 +15,24 @@ const mnemonic = process.env.WALLET_MNEMONIC;
 if (!mnemonic) {
     throw new Error('WALLET_MNEMONIC environment variable not set');
 }
-const signer = HDNodeWallet.fromMnemonic(mnemonic);
 
-const swapSDK = new SwapSDK({
-    network: "perseverance",
+// Crear un objeto HDNode desde el mnemonic
+const wallet = ethers.Wallet.fromPhrase(mnemonic);
+const privateKey = wallet.privateKey;
+const publicKey = wallet.publicKey
+
+
+const options = {
+    network: "perseverance", // Testnet
     backendServiceUrl: "https://example.chainflip.io",
-    signer,
+    signer: wallet,
     broker: {
-        url: 'https://my.broker.io',
-        commissionBps: 100, // 100 basis points = 1%
+      url: 'https://my.broker.io',
+      commissionBps: 0, // basis points, i.e. 100 = 1%
     },
-});
+  };
+
+const swapSDK = new SwapSDK(options);
 
 app.get('/assets', async (req, res) => {
     try {
