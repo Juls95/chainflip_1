@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { SwapSDK } from '@chainflip/sdk/swap';
-import { ethers } from 'ethers';
+import { SwapSDK, ChainflipNetwork } from '@chainflip/sdk/swap';
+import { Wallet } from 'ethers';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -16,21 +16,20 @@ if (!mnemonic) {
     throw new Error('WALLET_MNEMONIC environment variable not set');
 }
 
-// Crear un objeto HDNode desde el mnemonic
-const wallet = ethers.Wallet.fromPhrase(mnemonic);
+// Create a Wallet object from the mnemonic
+const wallet = Wallet.fromPhrase(mnemonic);
 const privateKey = wallet.privateKey;
-const publicKey = wallet.publicKey
-
+const publicKey = wallet.publicKey;
 
 const options = {
-    network: "perseverance", // Testnet
+    network: 'perseverance' as ChainflipNetwork, // Use type assertion for network
     backendServiceUrl: "https://example.chainflip.io",
     signer: wallet,
     broker: {
       url: 'https://my.broker.io',
       commissionBps: 0, // basis points, i.e. 100 = 1%
     },
-  };
+};
 
 const swapSDK = new SwapSDK(options);
 
@@ -39,7 +38,11 @@ app.get('/assets', async (req, res) => {
         const assets = await swapSDK.getAssets();
         res.status(200).json(assets);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Unknown error occurred' });
+        }
     }
 });
 
@@ -49,7 +52,11 @@ app.post('/quote', async (req, res) => {
         const quote = await swapSDK.getQuote({ srcAsset, srcChain, destAsset, destChain, amount });
         res.status(200).json(quote);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Unknown error occurred' });
+        }
     }
 });
 
@@ -63,11 +70,20 @@ app.post('/swap', async (req, res) => {
             destChain,
             amount,
             destAddress,
-            affiliateBrokers: ['https://my.broker.io'],
+            affiliateBrokers: [
+                {
+                    account: 'https://my.broker.io',
+                    commissionBps: 0 // basis points, i.e. 100 = 1%
+                }
+            ],
         });
         res.status(200).json(channel);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Unknown error occurred' });
+        }
     }
 });
 
@@ -77,10 +93,19 @@ app.get('/status', async (req, res) => {
         const status = await swapSDK.getStatus({ id: channelId as string });
         res.status(200).json(status);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Unknown error occurred' });
+        }
     }
 });
 
+// Ruta para la raíz
+app.get('/', (req, res) => {
+    res.send('Welcome to Chainflip Swap API');
+});
+
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server running on port  ${port}`);
 });
