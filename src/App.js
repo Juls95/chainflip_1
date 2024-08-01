@@ -11,12 +11,13 @@ import {
   PlusSmallIcon,
 } from '@heroicons/react/20/solid'
 import { BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import SwapForm from './components/SwapForm';
 
 const navigation = [
-  { name: 'Casitaaaaaa', href: '#' },
-  { name: 'Invoices', href: '#' },
+  { name: 'Home', href: '#' },
+  { name: 'Swaps', href: '#' },
   { name: 'Clients', href: '#' },
-  { name: 'Expenses', href: '#' },
+  { name: 'Vault', href: '#' },
 ]
 const secondaryNavigation = [
   { name: 'Last 7 days', href: '#', current: true },
@@ -24,10 +25,10 @@ const secondaryNavigation = [
   { name: 'All-time', href: '#', current: false },
 ]
 const stats = [
-  { name: 'Revenue', value: '$405,091.00', change: '+4.75%', changeType: 'positive' },
-  { name: 'Overdue invoices', value: '$12,787.00', change: '+54.02%', changeType: 'negative' },
-  { name: 'Outstanding invoices', value: '$245,988.00', change: '-1.39%', changeType: 'positive' },
-  { name: 'Expenses', value: '$30,156.00', change: '+10.18%', changeType: 'negative' },
+  { name: 'Total Swaps MXN', value: '$405,091.00', change: '+4.75%', changeType: 'positive' },
+  { name: 'Overdue SWAPS', value: '$12,787.00', change: '+54.02%', changeType: 'negative' },
+  { name: 'Outstanding SWAPS', value: '$245,988.00', change: '-1.39%', changeType: 'positive' },
+  { name: 'Vault', value: '$30,156.00', change: '+10.18%', changeType: 'negative' },
 ]
 const statuses = {
   Paid: 'text-green-700 bg-green-50 ring-green-600/20',
@@ -37,55 +38,55 @@ const statuses = {
 const days = [
   {
     date: 'Today',
-    dateTime: '2023-03-22',
+    dateTime: '2024-06-22',
     transactions: [
       {
         id: 1,
         invoiceNumber: '00012',
         href: '#',
-        amount: '$7,600.00 USD',
+        amount: '$7,600.00 MXN',
         tax: '$500.00',
         status: 'Paid',
-        client: 'Reform',
-        description: 'Website redesign',
+        client: 'Joseph',
+        description: 'Salsa Classes',
         icon: ArrowUpCircleIcon,
       },
       {
         id: 2,
         invoiceNumber: '00011',
         href: '#',
-        amount: '$10,000.00 USD',
+        amount: '$10,000.00 MXN',
         status: 'Withdraw',
-        client: 'Tom Cook',
-        description: 'Salary',
+        client: 'Julian R,',
+        description: 'Earnings last year',
         icon: ArrowDownCircleIcon,
       },
       {
         id: 3,
         invoiceNumber: '00009',
         href: '#',
-        amount: '$2,000.00 USD',
+        amount: '$2,000.00 MXN',
         tax: '$130.00',
         status: 'Overdue',
-        client: 'Tuple',
-        description: 'Logo design',
+        client: 'Elena A.',
+        description: 'Therapy',
         icon: ArrowPathIcon,
       },
     ],
   },
   {
     date: 'Yesterday',
-    dateTime: '2023-03-21',
+    dateTime: '2024-06-21',
     transactions: [
       {
         id: 4,
         invoiceNumber: '00010',
         href: '#',
-        amount: '$14,000.00 USD',
+        amount: '$14,000.00 MXN',
         tax: '$900.00',
         status: 'Paid',
-        client: 'SavvyCal',
-        description: 'Website redesign',
+        client: 'Benito J.',
+        description: 'Apartment Rental ',
         icon: ArrowUpCircleIcon,
       },
     ],
@@ -94,20 +95,20 @@ const days = [
 const clients = [
   {
     id: 1,
-    name: 'Tuple',
-    imageUrl: 'https://tailwindui.com/img/logos/48x48/tuple.svg',
+    name: 'Julian R.',
+    imageUrl: 'https://media.licdn.com/dms/image/D4D03AQHCqm8KsPuyyQ/profile-displayphoto-shrink_400_400/0/1697563473704?e=1727913600&v=beta&t=APnl4IxEensCtWw8po962fHI-HTE5uxLPpGzENxQvj0',
     lastInvoice: { date: 'December 13, 2022', dateTime: '2022-12-13', amount: '$2,000.00', status: 'Overdue' },
   },
   {
     id: 2,
-    name: 'SavvyCal',
-    imageUrl: 'https://tailwindui.com/img/logos/48x48/savvycal.svg',
+    name: 'Elena A.',
+    imageUrl: 'https://media.licdn.com/dms/image/D4E03AQHfmorcg1O-Qg/profile-displayphoto-shrink_400_400/0/1695060433356?e=1727913600&v=beta&t=mN5ckfOMZtvf1zfx7AYgeUpfchbObk03NW85-NVicMY',
     lastInvoice: { date: 'January 22, 2023', dateTime: '2023-01-22', amount: '$14,000.00', status: 'Paid' },
   },
   {
     id: 3,
-    name: 'Reform',
-    imageUrl: 'https://tailwindui.com/img/logos/48x48/reform.svg',
+    name: 'Benito J.',
+    imageUrl: 'https://www.gob.mx/cms/uploads/article/main_image/93587/probable-maxima-benito-juarez-inspirado.jpg',
     lastInvoice: { date: 'January 23, 2023', dateTime: '2023-01-23', amount: '$7,600.00', status: 'Paid' },
   },
 ]
@@ -117,7 +118,10 @@ function classNames(...classes) {
 }
 
 export default function Example() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [swapModalOpen, setSwapModalOpen] = useState(false);
+  const openSwapModal = () => setSwapModalOpen(true);
+  const closeSwapModal = () => setSwapModalOpen(false);
 
   return (
     <>
@@ -130,7 +134,7 @@ export default function Example() {
             </button>
             <img
               alt="Your Company"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+              src="https://seeklogo.com/images/E/Escudo_Nacional_Mexicano-logo-59E0CA678A-seeklogo.com.png"
               className="h-8 w-auto"
             />
           </div>
@@ -150,7 +154,7 @@ export default function Example() {
               <span className="sr-only">Your profile</span>
               <img
                 alt=""
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src="https://media.licdn.com/dms/image/D4D03AQHCqm8KsPuyyQ/profile-displayphoto-shrink_400_400/0/1697563473704?e=1727913600&v=beta&t=APnl4IxEensCtWw8po962fHI-HTE5uxLPpGzENxQvj0"
                 className="h-8 w-8 rounded-full bg-gray-800"
               />
             </a>
@@ -203,15 +207,16 @@ export default function Example() {
                   </a>
                 ))}
               </div>
-              <a
-                href="#"
+              <button
+                onClick={openSwapModal}
                 className="ml-auto flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 <PlusSmallIcon aria-hidden="true" className="-ml-1.5 h-5 w-5" />
-                New invoice
-              </a>
+                New SWAP
+              </button>
             </div>
           </header>
+
 
           {/* Stats */}
           <div className="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5">
@@ -419,6 +424,54 @@ export default function Example() {
               </ul>
             </div>
           </div>
+          {/* Swap Modal */}
+          <Transition show={swapModalOpen} as={Fragment}>
+            <Dialog onClose={closeSwapModal} className="relative z-10">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <div className="fixed inset-0 bg-black bg-opacity-25" />
+              </Transition.Child>
+
+              <div className="fixed inset-0 overflow-y-auto">
+                <div className="flex min-h-full items-center justify-center p-4 text-center">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95"
+                  >
+                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                      <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                        Swap Tokens
+                      </Dialog.Title>
+                      <div className="mt-2">
+                        <SwapForm />
+                      </div>
+                      <div className="mt-4">
+                        <button
+                          type="button"
+                          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                          onClick={closeSwapModal}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </Dialog.Panel>
+                  </Transition.Child>
+                </div>
+              </div>
+            </Dialog>
+          </Transition>
         </div>
       </main>
     </>
