@@ -1,11 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import ReactDOM from 'react-dom/client';  // Nota el cambio aquí
+import './output.css'
 import App from './App';
 
-ReactDOM.render(
+// Crea una raíz para el renderizado de la aplicación
+const rootElement = document.getElementById('root');
+const root = ReactDOM.createRoot(rootElement);
+
+
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );
